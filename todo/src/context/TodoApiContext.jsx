@@ -10,12 +10,14 @@ import { useNavigate } from 'react-router-dom'
 const Context = React.createContext()
 
 function TodoApiContext({children}) {
+    
+    const navigate = useNavigate()
 
     const {insertItem, insertBatch, replaceItem, popItem, todoList} = useTodo()
     const api = useApi()
-
+    
+    // --------------------- METHODS --------------------- 
     const createItem = ()=> null
-    const navigate = useNavigate()
 
     const getItem = (todoID) => {
         const endpoint = endpoints.getTodoUrl(todoID)
@@ -46,14 +48,10 @@ function TodoApiContext({children}) {
         api.get(endpoint)
         .then((response)=>{
             replaceItem(todoID, response.data)
-
         })
         .catch(error=> {
             navigate("/error", {state: {status: error.response.status, message: "Something is wrong. I click the button 👇 below. NOTE:: This might not resolve anything."}})
         })
-        
-        
-        
     }
 
     const getRange = ()=> {
@@ -64,8 +62,10 @@ function TodoApiContext({children}) {
         })
     }
     const updateItem = ()=> null
+    
     const deleteItem = ()=> null
 
+    // --------------------- CONTEXT VALUE --------------------- 
     const methods = {refreshItem, getRange, getItem}
     const data = {}
 

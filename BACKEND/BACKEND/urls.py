@@ -23,8 +23,8 @@ from Todo.admin import todo_admin_site
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("todo-admin/", todo_admin_site.urls),
     path("todo/", include("Todo.urls", namespace= "Todo")),
-    path("todo-admin/", todo_admin_site.urls)
 ]
 
 

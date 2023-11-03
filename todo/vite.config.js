@@ -18,6 +18,7 @@ export default defineConfig({
 			{ find: "@src-utils", replacement: path.resolve(__dirname, "./src/utils") },
 		],
 	},
+	define: {},
 	base: "./",
 	server: { port: 3000 }
 })

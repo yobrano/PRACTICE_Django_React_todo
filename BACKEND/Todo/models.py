@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib import admin
-from datetime import datetime
+from django.utils import timezone
 # Create your models here.
 
 COMPLETION_CHOICES = (
@@ -18,8 +18,8 @@ PRIORITY_CHOICES = (
 
 class TodoItem(models.Model):
     label = models.CharField(max_length=50,)
-    start = models.DateTimeField(default= datetime.now())
-    end = models.DateTimeField(blank= True, null= True)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
     priority = models.CharField(choices= PRIORITY_CHOICES, max_length=20 )
     description = models.TextField(blank= True)
     completion = models.CharField(choices= COMPLETION_CHOICES, max_length=20, default= "PENDING", null= True, blank= True)

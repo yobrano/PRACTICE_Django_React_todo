@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import TodoContext from './context/TodoContext'
 import { Route, Routes } from 'react-router-dom'
-import TodoForm from '@src-views/TodoForm'
-import TodoList from './views/TodoList'
+import TodoForm from '@src-views/Todo/TodoForm'
+import TodoList from './views/Todo/TodoList'
 import TodoApiContext from './context/TodoApiContext'
-import TodoView from './views/TodoView'
+import TodoView from './views/Todo/TodoView'
 import ErrorPage from './views/ErrorPage'
 
 

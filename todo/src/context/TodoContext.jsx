@@ -1,5 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+import * as duration from 'dayjs/plugin/duration';
 
+import React, { useContext,  useState } from 'react'
+
+dayjs.extend(duration);
 
 const Context = React.createContext()
 
@@ -10,14 +14,13 @@ function TodoContext({ children }) {
 
     
     const insertItem = (todo)=>{
-        const temp = [todo, ...todoList]
+        const temp = [new TodoItem(todo), ...todoList]
         setTodoList(temp)
-        setTodoItem(todo)
-        
+        setTodoItem(new TodoItem(todo))        
     }   
 
     const insertBatch = (batchTodos)=>{
-        const temp = batchTodos.map(todoItem=>mapTodoItem(todoItem))
+        const temp = batchTodos.map(todoItem=>new TodoItem(todoItem))
         setTodoList(temp)
     }
 
@@ -42,7 +45,7 @@ function TodoContext({ children }) {
     }
 
     const data = {
-        emptyTodoItem:  mapTodoItem(),
+        emptyTodoItem: new TodoItem({id: "-"}),
         todoList,
         todoItem,
         selectedItem,
@@ -55,19 +58,37 @@ function TodoContext({ children }) {
     )   
 }
 
-const mapTodoItem = todoItem =>
-    ({
-        id: todoItem? todoItem.id: null,
-        label: todoItem ?todoItem.label:  "",
-        start: todoItem ?new Date(todoItem.start):  new Date(),
-        end: todoItem ?new Date(todoItem.end):  new Date(),
-        priority: todoItem ?todoItem.priority:   "MEDIUM",
-        description: todoItem ?todoItem.description:   "",
-        completion: todoItem ?todoItem.completion:   "PENDING",
-        createdAt: todoItem ?new Date(todoItem.created_at):  null,
-        updatedAt: todoItem ?new Date(todoItem.updated_at):  null,
-        isComplete: todoItem? todoItem.is_complete: false,
-    })
-    // datejs(todoItem.start)
+
+class TodoItem{
+    constructor(todo){
+        if(todo.id !== null){
+            this.id = todo.id 
+            this.label = todo.label 
+            this.start = todo.start? dayjs(todo.start) : null 
+            this.end = todo.end? dayjs(todo.end) : null
+            this.priority = todo.priority 
+            this.description = todo.description 
+            this.completion = todo.completion 
+            this.createdAt = todo.created_at?  dayjs(todo.created_at): null
+            this.updatedAt = todo.updated_at ?  dayjs(todo.updated_at): null
+            this.isComplete = todo.is_complete 
+        }
+    }
+
+    duration(){
+        if(this.start !== null && this.end !== null )
+        {
+            const diff= this.end.diff(this.start)
+            console.log(diff)
+            return dayjs.duration(diff)
+        }
+
+        return "-"
+    }
+
+    startDateTime = ()=> this.start?{date: this.start.format("DD MMM YYYY"), time: this.start.format("HH:mm")} : "-"
+    endDateTime = ()=> this.end?{date: this.end.format("DD MMM YYYY"), time: this.end.format("HH:mm")} : "-"
+    
+}
 export const useTodo = ()=> useContext(Context)
 export default TodoContext
